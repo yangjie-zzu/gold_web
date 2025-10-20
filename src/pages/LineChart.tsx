@@ -3,6 +3,7 @@ import { BaseChart } from "../components/BaseChart";
 import type { gold_price } from "../schema/gold";
 import * as d3 from "d3";
 import React, { useCallback, useEffect } from "react";
+import "./LineChart.css";
 
 // 日期中文本地化
 d3.timeFormatDefaultLocale({
@@ -208,8 +209,8 @@ export function LineChart() {
 
                     // Add the X Axis
                     svg.append("g")
+                        .attr("class", "x-axis")
                         .attr("transform", `translate(0,${height})`)
-                        .attr("font-size", 10)
                         .call(d3.axisBottom(x).tickFormat((v, i) => {
                             const h = (v as Date).getHours();
                             return h.toString();
