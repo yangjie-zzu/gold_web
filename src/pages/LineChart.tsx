@@ -1,3 +1,4 @@
+import CountUp from "react-countup";
 import { BaseChart } from "../components/BaseChart";
 import type { gold_price } from "../schema/gold";
 import * as d3 from "d3";
@@ -112,16 +113,23 @@ export function LineChart() {
                     // Add the Y Axis
                     svg.append("g")
                         .call(d3.axisLeft(y));
-                    // Add the line path
+                    // Add the date line path
                     svg.append("path")
                         .datum(formattedData)
                         .attr("fill", "none")
                         .attr("stroke", "steelblue")
                         .attr("stroke-width", 1.5)
-                        .attr("d", line(data));
+                        .attr("d", line(data?.filter(d => d.price_time_type === 'date') || []));
+                    // Add the last line path
+                    svg.append("path")
+                        .datum(formattedData)
+                        .attr("fill", "none")
+                        .attr("stroke", "orange")
+                        .attr("stroke-width", 1.5)
+                        .attr("d", line(data?.filter(d => d.price_time_type === 'last') || []));
                 }, [data])}
             />
-            <div>最新价格: {last?.price}; 时间: {date}</div>
+            <div>最新价格: <CountUp end={parseFloat(last?.price)}/>;<br />时间: {date}</div>
             <BaseChart style={{ height: '50vw', background: 'transparent' }}
                 renderChart={useCallback((container) => {
                     if ((data?.length || 0) === 0) {
@@ -201,6 +209,7 @@ export function LineChart() {
                     // Add the X Axis
                     svg.append("g")
                         .attr("transform", `translate(0,${height})`)
+                        .attr("font-size", 10)
                         .call(d3.axisBottom(x).tickFormat((v, i) => {
                             const h = (v as Date).getHours();
                             return h.toString();
@@ -223,102 +232,7 @@ export function LineChart() {
                         .attr("stroke", "steelblue")
                         .attr("stroke-width", 1.5)
                         .attr("d", line(list));
-                    const pw = totalWidth / formattedData.length;
-                    console.log('pw', pw, totalWidth, formattedData.length);
 
-                    const toolTipInstance = (() => {
-                        const toolTipWidth = 138;
-                        const toolTipHeight = 48;
-                        const tooltip = svg.append('g')
-                            .attr('class', 'tooltip')
-                            .style('position', 'relative')
-                            .style('z-index', 200)
-
-                        tooltip.append('rect')
-                            .attr('x', 0)
-                            .attr('y', 0)
-                            .attr('width', toolTipWidth)
-                            .attr('height', toolTipHeight - 4)
-                            .attr('fill', 'white')
-                            .attr('fill-opacity', 1)
-                            .attr('stroke', 'black');
-
-                        const price = tooltip.append('text')
-                            .attr('x', 4)
-                            .attr('y', 20)
-                            .attr('line-height', '20px')
-
-                        const date = tooltip.append('text')
-                            .attr('x', 4)
-                            .attr('y', 40)
-                            .attr('line-height', '20px')
-                        const vLine = svg.append('line')
-                            .attr('class', 'tooltip')
-                            .attr('y1', 0)
-                            .attr('y2', height)
-                            .attr('stroke', 'red')
-                            .attr('stroke-width', 1);
-                        const hLine = svg.append('line')
-                            .attr('class', 'tooltip')
-                            .attr('x1', 0)
-                            .attr('x2', totalWidth)
-                            .attr('stroke', 'red')
-                            .attr('stroke-width', 1);
-                        const hide = () => {
-                            tooltip.style('opacity', '0');
-                            vLine.attr('opacity', '0');
-                            hLine.attr('opacity', '0');
-                        }
-                        const show = () => {
-                            tooltip.style('opacity', 1);
-                            tooltip.raise();
-                            vLine.attr('opacity', '1');
-                            hLine.attr('opacity', '1');
-                        }
-                        hide();
-                        return {
-                            update: ({
-                                left,
-                                top,
-                                priceText,
-                                dateText,
-                            }) => {
-                                const toolTipLeft = left + toolTipWidth / 2 > totalWidth ? (totalWidth - toolTipWidth) : left - (toolTipWidth / 2);
-                                const tooltipTop = top - toolTipHeight;
-                                tooltip.attr('transform', `translate(${toolTipLeft},${tooltipTop})`);
-                                price.text(priceText);
-                                date.text(dateText);
-                                vLine.attr('x1', left).attr('x2', left);
-                                hLine.attr('y1', top).attr('y2', top);
-                                show();
-                            },
-                            hide,
-                        }
-                    })();
-
-                    // svg.selectAll('.rect')
-                    //     .data(formattedData)
-                    //     .enter()
-                    //     .append('rect')
-                    //     .attr('class', 'rect')
-                    //     .style('cursor', 'pointer')
-                    //     .attr('x', (d, i) => {
-                    //         return x(d.price_time) - pw / 2;
-                    //     })
-                    //     .attr('y', d => 0)
-                    //     .attr('width', pw)
-                    //     .attr('height', height)
-                    //     .attr('fill', 'rgba(255, 160, 122, 0.2)')
-                    //     .on('mouseenter', (event, d) => {
-                    //         const left = x(d.price_time);
-                    //         const top = y(parseFloat(d.price));
-                    //         toolTipInstance.update({
-                    //             left,
-                    //             top,
-                    //             priceText: `价格: ${d.price} 元/克`,
-                    //             dateText: `${d3.timeFormat("%Y-%m-%d %H:%M")(d.price_time)}`,
-                    //         });
-                    //     });
                     svg.on('mouseleave', () => {
                         // toolTip.hide();
                     });
