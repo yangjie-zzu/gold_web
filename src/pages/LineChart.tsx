@@ -113,13 +113,6 @@ export function LineChart() {
                     // Add the Y Axis
                     svg.append("g")
                         .call(d3.axisLeft(y));
-                    // Add the date line path
-                    svg.append("path")
-                        .datum(formattedData)
-                        .attr("fill", "none")
-                        .attr("stroke", "steelblue")
-                        .attr("stroke-width", 1.5)
-                        .attr("d", line(data?.filter(d => d.price_time_type === 'date') || []));
                     // Add the last line path
                     svg.append("path")
                         .datum(formattedData)
@@ -127,9 +120,16 @@ export function LineChart() {
                         .attr("stroke", "orange")
                         .attr("stroke-width", 1.5)
                         .attr("d", line(data?.filter(d => d.price_time_type === 'last') || []));
+                    // Add the date line path
+                    svg.append("path")
+                        .datum(formattedData)
+                        .attr("fill", "none")
+                        .attr("stroke", "steelblue")
+                        .attr("stroke-width", 1.5)
+                        .attr("d", line(data?.filter(d => d.price_time_type === 'date') || []));
                 }, [data])}
             />
-            <div>最新价格: <CountUp end={parseFloat(last?.price)}/>;<br />时间: {date}</div>
+            <div style={{paddingLeft: 16}}>最新价格: <CountUp end={parseFloat(last?.price)}/>;<br />时间: {date}</div>
             <BaseChart style={{ height: '50vw', background: 'transparent' }}
                 renderChart={useCallback((container) => {
                     if ((data?.length || 0) === 0) {
