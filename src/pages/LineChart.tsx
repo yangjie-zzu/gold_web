@@ -1,9 +1,9 @@
-import CountUp from "react-countup";
 import { BaseChart } from "../components/BaseChart";
 import type { gold_price } from "../schema/gold";
 import * as d3 from "d3";
 import React, { useCallback, useEffect } from "react";
 import "./LineChart.css";
+import { Count } from "../components/Count";
 
 // 日期中文本地化
 d3.timeFormatDefaultLocale({
@@ -130,7 +130,7 @@ export function LineChart() {
                         .attr("d", line(data?.filter(d => d.price_time_type === 'date') || []));
                 }, [data])}
             />
-            <div style={{paddingLeft: 16}}>最新价格: <CountUp end={parseFloat(last?.price)}/>;<br />时间: {date}</div>
+            <div style={{paddingLeft: 16}}>最新价格: <Count val={parseFloat(last?.price)}/>;<br />时间: {date}</div>
             <BaseChart style={{ height: '50vw', background: 'transparent' }}
                 renderChart={useCallback((container) => {
                     if ((data?.length || 0) === 0) {
