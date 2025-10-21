@@ -43,7 +43,9 @@ export function LineChart() {
         queryDataRef.current();
     }, [queryDataRef]);
 
-    const last = data?.[data?.length - 1];
+    const lastList = data?.filter(item => item.price_time_type === 'last')
+
+    const last = lastList?.[lastList?.length - 1];
 
     const date = last?.price_time == null ? null : d3.timeFormat("%Y-%m-%d %H:%M:%S")(new Date(parseFloat(last?.price_time)));
 
