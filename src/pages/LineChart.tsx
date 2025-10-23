@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import React, { useCallback, useEffect } from "react";
 import "./LineChart.css";
 import { Count } from "../components/Count";
+import { AvgPrice } from "./AvgPrice";
 
 // 日期中文本地化
 d3.timeFormatDefaultLocale({
@@ -21,11 +22,6 @@ d3.timeFormatDefaultLocale({
 export function LineChart() {
 
     const [data, setData] = React.useState<gold_price[]>(localStorage.getItem('gold_prices') ? JSON.parse(localStorage.getItem('gold_prices')) : []);
-
-    const [num, setNum] = React.useState<number>(localStorage.getItem('num') ? parseFloat(localStorage.getItem('num')) : null);
-    const [price, setPrice] = React.useState<number>(localStorage.getItem('price') ? parseFloat(localStorage.getItem('price')) : null);
-    const [buyMoney, setBuyMoney] = React.useState<number>(localStorage.getItem('buyMoney') ? parseFloat(localStorage.getItem('buyMoney')) : null);
-    const [buyPrice, setBuyPrice] = React.useState<number>(localStorage.getItem('buyPrice') ? parseFloat(localStorage.getItem('buyPrice')) : null);
 
     const [loading, setLoading] = React.useState(false);
 
@@ -107,8 +103,9 @@ export function LineChart() {
                         });
 
                     // Add the X Axis
-                    svg.append("g")
+                    const gx = svg.append("g")
                         .attr("transform", `translate(0,${height})`)
+                        .attr("class", "x-axis")
                         .call(d3.axisBottom(x).tickFormat((v, i) => {
                             return d3.timeFormat("%Y-%m-%d %H:%M")(v as Date);
                         }).tickValues((() => {
@@ -117,6 +114,9 @@ export function LineChart() {
                                 formattedData?.[formattedData?.length - 1]?.price_time
                             ];
                         })()));
+                    
+                    gx.selectAll('.tick text')
+                        .attr('text-anchor', (d, i) => i === 0 ? 'start' : 'end')
 
                     // Add the Y Axis
                     svg.append("g")
@@ -180,7 +180,7 @@ export function LineChart() {
                         .style('pointer-events', 'none');
 
                     const ySvg = ySvgWrapper.append('svg')
-                        .attr("width", width + margin.left + margin.right)
+                        .attr("width", width)
                         .attr("height", height + margin.top + margin.bottom)
                         .append("g")
                         .attr("transform", `translate(${margin.left},${margin.top})`);
@@ -301,25 +301,7 @@ export function LineChart() {
             <div style={{ display: 'flex', justifyContent: 'center', marginTop: 8 }}>
                 <button onClick={queryData}>{loading ? '请求中' : '刷新'}</button>
             </div>
-            <div>
-                <input type="number" placeholder="克数" onChange={e => {
-                    setNum(parseFloat(e.target.value));
-                    localStorage.setItem('num', e.target.value);
-                }}/>
-                <input type="number" placeholder="价格" onChange={e => {
-                    setPrice(parseFloat(e.target.value));
-                    localStorage.setItem('price', e.target.value);
-                }}/>
-                <input type="number" placeholder="购买金额" onChange={e => {
-                    setBuyMoney(parseFloat(e.target.value));
-                    localStorage.setItem('buyMoney', e.target.value);
-                }}/>
-                <input type="number" placeholder="购买价格" onChange={e => {
-                    setBuyPrice(parseFloat(e.target.value));
-                    localStorage.setItem('buyPrice', e.target.value);
-                }}/>
-                <div>{((num * price + buyMoney) / (buyMoney / buyPrice + num)) || null}</div>
-            </div>
+            <AvgPrice />
         </div>
     );
 }

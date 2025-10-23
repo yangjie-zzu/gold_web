@@ -2,3 +2,9 @@
   font-size: 10px;
   transform: scale(0.7);
 }
+
+.calc-container {
+  input {
+    width: 30px;
+  }
+}
