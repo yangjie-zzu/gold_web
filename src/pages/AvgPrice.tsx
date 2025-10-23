@@ -40,7 +40,7 @@ export const AvgPrice = () => {
     }
 
     return (
-        <div>
+        <div style={{padding: 16}}>
             <div>
                 <FieldWrapper label="当前总额">
                     <input type="number" value={money} onChange={e => {

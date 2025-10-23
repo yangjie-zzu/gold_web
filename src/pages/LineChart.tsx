@@ -51,7 +51,7 @@ export function LineChart() {
     const date = last?.price_time == null ? null : d3.timeFormat("%Y-%m-%d %H:%M:%S")(new Date(parseFloat(last?.price_time)));
 
     return (
-        <div style={{ width: '100%' }}>
+        <div style={{ width: '100%', paddingTop: 16, paddingBottom: 16 }}>
             <BaseChart style={{ height: '50vw', background: 'transparent', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}
                 renderChart={useCallback((container) => {
                     if ((data?.length || 0) === 0) {
@@ -60,7 +60,7 @@ export function LineChart() {
                     // Clear previous chart
                     d3.select(container).selectAll("*").remove();
 
-                    const margin = { top: 20, right: 20, bottom: 30, left: 30 };
+                    const margin = { top: 20, right: 20, bottom: 30, left: 35 };
                     const width = container.clientWidth - margin.left - margin.right;
                     const height = container.clientHeight - margin.top - margin.bottom;
 
@@ -147,7 +147,7 @@ export function LineChart() {
                     // Clear previous chart
                     d3.select(container).style('position', 'relative').selectAll("*").remove();
 
-                    const margin = { top: 20, right: 20, bottom: 30, left: 30 };
+                    const margin = { top: 20, right: 20, bottom: 30, left: 35 };
                     const width = container.clientWidth - margin.left - margin.right;
                     const height = container.clientHeight - margin.top - margin.bottom;
 
