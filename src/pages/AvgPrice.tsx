@@ -45,21 +45,25 @@ export const AvgPrice = () => {
                 <FieldWrapper label="当前总额">
                     <input type="number" value={money} onChange={e => {
                         setMoney(parseFloat(e.target.value));
+                        localStorage.setItem('money', e.target.value);
                     }}/>
                 </FieldWrapper>
                 <FieldWrapper label="当前克数">
                     <input type="number" value={gram} onChange={e => {
                         setGram(parseFloat(e.target.value));
+                        localStorage.setItem('gram', e.target.value);
                     }}/>
                 </FieldWrapper>
                 <FieldWrapper label="购买总额">
                     <input type="number" value={buyMoney} onChange={e => {
                         setBuyMoney(parseFloat(e.target.value));
+                        localStorage.setItem('buyMoney', e.target.value);
                     }}/>
                 </FieldWrapper>
                 <FieldWrapper label="购买价格">
                     <input type="number" value={buyPrice} onChange={e => {
                         setBuyPrice(parseFloat(e.target.value));
+                        localStorage.setItem('buyPrice', e.target.value);
                     }}/>
                 </FieldWrapper>
             </div>
