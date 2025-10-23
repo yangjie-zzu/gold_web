@@ -60,7 +60,7 @@ export function LineChart() {
                     // Clear previous chart
                     d3.select(container).selectAll("*").remove();
 
-                    const margin = { top: 20, right: 44, bottom: 30, left: 50 };
+                    const margin = { top: 20, right: 20, bottom: 30, left: 30 };
                     const width = container.clientWidth - margin.left - margin.right;
                     const height = container.clientHeight - margin.top - margin.bottom;
 
@@ -105,7 +105,6 @@ export function LineChart() {
                     // Add the X Axis
                     const gx = svg.append("g")
                         .attr("transform", `translate(0,${height})`)
-                        .attr("class", "x-axis")
                         .call(d3.axisBottom(x).tickFormat((v, i) => {
                             return d3.timeFormat("%Y-%m-%d %H:%M")(v as Date);
                         }).tickValues((() => {
@@ -148,7 +147,7 @@ export function LineChart() {
                     // Clear previous chart
                     d3.select(container).style('position', 'relative').selectAll("*").remove();
 
-                    const margin = { top: 20, right: 30, bottom: 30, left: 40 };
+                    const margin = { top: 20, right: 20, bottom: 30, left: 30 };
                     const width = container.clientWidth - margin.left - margin.right;
                     const height = container.clientHeight - margin.top - margin.bottom;
 
@@ -172,7 +171,7 @@ export function LineChart() {
                         .attr("transform", `translate(${margin.left},${margin.top})`);
 
                     const ySvgWrapper = d3.select(container).append('div')
-                        .style('width', `${width + margin.left + margin.right}px`)
+                        .style('width', width + margin.left + margin.right)
                         .style('height', `auto`)
                         .style('position', 'absolute')
                         .style('top', `0`)
@@ -180,7 +179,7 @@ export function LineChart() {
                         .style('pointer-events', 'none');
 
                     const ySvg = ySvgWrapper.append('svg')
-                        .attr("width", width)
+                        .attr("width", width + margin.left + margin.right)
                         .attr("height", height + margin.top + margin.bottom)
                         .append("g")
                         .attr("transform", `translate(${margin.left},${margin.top})`);
